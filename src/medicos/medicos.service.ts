@@ -3,9 +3,40 @@ import { PrismaService } from '../prisma/prisma.service.js';
 
 @Injectable()
 export class MedicosService {
-    constructor(private readonly prisma: PrismaService) {}
-    findAll (){
-        return this.prisma.medico.findMany();
-    }
-}
+  constructor(private readonly prisma: PrismaService) {}
+  findAll() {
+    return this.prisma.medico.findMany({
+      orderBy: { id: 'asc' },
+      include: {
+        especialidad: true, 
+      },
+    });
+  }
 
+  findOne(id: number) {
+    return this.prisma.medico.findUnique({
+      where: { id },
+      include: {
+        especialidad: true,
+      },
+    });
+  }
+
+  create(data: any) {
+    return this.prisma.medico.create({
+      data,
+    });
+  }
+
+  update(id: number, data: any) {
+    return this.prisma.medico.update({
+      where: { id },
+      data,
+    });
+  }
+  remove(id: number) {
+    return this.prisma.medico.delete({
+      where: { id },
+    });
+  }
+}
