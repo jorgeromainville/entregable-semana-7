@@ -9,14 +9,16 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PacientesService } from './pacientes.service.js';
+import { CreatePacienteDto } from './dto/create-paciente.dto.js';
+import { UpdatePacienteDto } from './dto/update-paciente.dto.js';
 
 @Controller('pacientes')
 export class PacientesController {
   constructor(private readonly pacientesService: PacientesService) {}
 
   @Post()
-  create(@Body() body: any) {
-    return this.pacientesService.create(body);
+  create(@Body() dto: CreatePacienteDto) {
+    return this.pacientesService.create(dto)
   }
 
   @Get()
@@ -34,8 +36,8 @@ export class PacientesController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() body: any) {
-    return this.pacientesService.update(+id, body);
+  update(@Param('id') id: string, @Body() dto: UpdatePacienteDto) {
+    return this.pacientesService.update(Number(id), dto)
   }
 
   @Delete(':id')

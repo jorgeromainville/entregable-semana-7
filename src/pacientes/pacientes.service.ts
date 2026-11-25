@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common'
+import { BadRequestException, Injectable } from '@nestjs/common'
+import { CreatePacienteDto } from './dto/create-paciente.dto.js'
 import { PrismaService } from '../prisma/prisma.service.js'
 
 @Injectable()
@@ -13,7 +14,10 @@ export class PacientesService {
       where: { id },
     });
   }
-  create(data:any){
+  async create(data: CreatePacienteDto) {
+    if (new Date(data.fechaNacimiento) > new Date()) {
+      throw new BadRequestException('La fecha de nacimiento no puede ser futura')
+    }
     return this.prisma.paciente.create({
       data
     });
